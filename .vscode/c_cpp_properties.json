@@ -1,0 +1,19 @@
+{
+  "configurations": [
+    {
+      "name": "Mac",
+      "includePath": [
+        "${workspaceFolder}/**",
+        "/opt/homebrew/opt/llvm/include/c++/v1",
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include"
+      ],
+      "defines": [],
+      "macFrameworkPath": [],
+      "compilerPath": "/opt/homebrew/opt/llvm/bin/",
+      "cStandard": "c23",
+      "cppStandard": "c++23",
+      "intelliSenseMode": "macos-clang-arm64"
+    }
+  ],
+  "version": 4
+}
