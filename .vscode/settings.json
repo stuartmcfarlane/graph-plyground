@@ -1,11 +1,4 @@
 {
-  "files.associations": {
-    "iostream": "cpp",
-    "vector": "cpp",
-    "fstream": "cpp",
-    "string": "cpp",
-    "regex": "cpp"
-  },
   "cSpell.words": [
     "CPLUS",
     "CPPFLAGS",
