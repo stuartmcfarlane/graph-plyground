@@ -1,3 +1,6 @@
-void dijkstra_test();
-void day02();
-void day03();
+#include <string>
+#include <vector>
+#include <utility>
+
+std::pair<std::vector<std::string>, int> dijkstra_test(std::string start, std::string end, 
+                                        std::vector<std::string> arcs);
