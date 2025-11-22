@@ -7,7 +7,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/build/graph_dbg",
             "targetArchitecture": "arm64",
-            "args": [],
+            "args": ["data/graph1"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
