@@ -1,7 +1,7 @@
 export CC="/opt/homebrew/opt/llvm/bin/clang++"
 export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
 export LDFLAGS="-L/opt/homebrew/opt/llvm/lib"
-export CPPFLAGS="-I/opt/homebrew/opt/llvm/include"
+export CPPFLAGS="-I/opt/homebrew/opt/llvm/include -std=c++20"
 export CPLUS_INCLUDE_PATH=/opt/homebrew/opt/llvm/include/c++/v1:/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include
 export LIBRARY_PATH=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib
 

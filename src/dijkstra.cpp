@@ -22,8 +22,9 @@ void dijkstra(vector<vector<pair<int, int>>> adj, int s, vector<int> &d, vector<
     for (int i = 0; i < n; i++) {
         int v = -1;
         for (int j = 0; j < n; j++) {
-            if (!u[j] && (v == -1 || d[j] < d[v]))
-            v = j;
+            if (!u[j] && (v == -1 || d[j] < d[v])) {
+                v = j;
+            }
         }
         
         if (d[v] == INF) break;
@@ -58,18 +59,29 @@ string edgeKey(const string &a, const string &b) {
     return a + ":" + b;
 }
 
-pair<vector<string>, int> dijkstra_test(string start, string end, vector<string> arcs) {
+void print_graph(vector<string> nodes, vector<vector<pair<int, int>>> graph) {
+    int i = 0;
+    for (auto a : graph) {
+        cout << nodes[i] << " : [";
+        for (auto b : a) {
+            cout << "(" << nodes[b.first] << " " << " " << b.second << ")";
+        }
+        cout << "]" << endl;
+        i++;
+    }
+}
+
+pair<vector<string>, int> dijkstra_path(string start, string end, vector<string> arcs) {
     map<string, int> nodeIdx;
     vector<string> nodes;
     map<string, int> weights;
     vector<vector<pair<int, int>>> adj;
     int i = 0;
     
-    for (auto lineIterator = arcs.begin(); lineIterator != arcs.end();
-    lineIterator++) {
+    for (auto arc : arcs) {
         string a, b;
         int w;
-        stringstream ss(*lineIterator);
+        stringstream ss(arc);
         ss >> a;
         ss >> b;
         ss >> w;
@@ -87,15 +99,8 @@ pair<vector<string>, int> dijkstra_test(string start, string end, vector<string>
         adj[nodeIdx[a]].push_back(pair<int, int>(nodeIdx[b], w));
     }
     
-    i = 0;
-    for (auto pA = adj.begin(); pA != adj.end(); *pA++, i++) {
-        cout << nodes[i] << " : [";
-        for (auto pB = pA->begin(); pB != pA->end(); *pB++) {
-            auto b = *pB;
-            cout << "(" << nodes[pB->first] << " " << " " << pB->second << ")";
-        }
-        cout << "]" << endl;
-    }
+    print_graph(nodes, adj);
+    
     vector<int> d;
     vector<int> p;
     dijkstra(adj, nodeIdx[start], d, p);
@@ -104,8 +109,8 @@ pair<vector<string>, int> dijkstra_test(string start, string end, vector<string>
     vector<string> nodePath;
     int distance = 0;
     string last;
-    for (auto pIt = path.begin(); pIt != path.end(); *pIt++) {
-        string node = nodes[*pIt];
+    for (auto n : path) {
+        string node = nodes[n];
         if (!last.empty()) {
             distance += weights[edgeKey(last, node)];
         }

@@ -1,6 +1,6 @@
 TARGET_EXEC ?= graph
 
-CC ?= g++	
+CC?=clang++
 
 BUILD_DIR ?= ./build
 SRC_DIRS ?= ./src
