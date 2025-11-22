@@ -1,6 +1,6 @@
+#include "graph.h"
 #include <map>
 #include <string>
-#include <sstream>
 #include <utility>
 #include <vector>
 #include <algorithm>
@@ -8,6 +8,7 @@
 
 
 using namespace std;
+using namespace graph;
 
 const int INF = 1000000000;
 
@@ -71,20 +72,15 @@ void print_graph(vector<string> nodes, vector<vector<pair<int, int>>> graph) {
     }
 }
 
-pair<vector<string>, int> dijkstra_path(string start, string end, vector<string> arcs) {
+pair<vector<string>, int> dijkstra_path(string start, string end, Graph <int>graph) {
     map<string, int> nodeIdx;
     vector<string> nodes;
     map<string, int> weights;
     vector<vector<pair<int, int>>> adj;
     int i = 0;
-    
-    for (auto arc : arcs) {
-        string a, b;
-        int w;
-        stringstream ss(arc);
-        ss >> a;
-        ss >> b;
-        ss >> w;
+
+    for (auto arc : graph) {
+        auto [a, b, w] = arc;
         weights[edgeKey(a, b)] = w;
         if (nodeIdx.find(a) == nodeIdx.end()) {
             nodeIdx[a] = i++;

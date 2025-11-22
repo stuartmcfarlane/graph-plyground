@@ -3,8 +3,10 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include "graph.h"
 
 using namespace std;
+using namespace graph;
 
 int main(int argc, char **argv) {
   string program = argv[0];
@@ -17,7 +19,8 @@ int main(int argc, char **argv) {
     string inputFile = argv[argi];
     cout << inputFile << endl;
     vector<string> input = readFileLines(inputFile);
-    auto pathAndDistance = dijkstra_path("S", "F", input);
+    auto graph = lines2graph<int>(input);
+    auto pathAndDistance = dijkstra_path("S", "F", graph);
     auto [path, distance] = pathAndDistance;
     for( auto p : path) {
       cout << p << " ";
