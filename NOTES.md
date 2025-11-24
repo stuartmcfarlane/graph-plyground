@@ -2,7 +2,7 @@
 
 ## Goals
 
-1. get off the ground with Dijkstra's algorithm
+1. ✅ get off the ground with Dijkstra's algorithm
 2. plot the graph
 3. plot Dijkstra solution
 4. layout the graph nicely

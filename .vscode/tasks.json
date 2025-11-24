@@ -5,10 +5,13 @@
       "label": "C/C++: clang++ build graph",
       "command": "/opt/homebrew/opt/llvm/bin/clang++",
       "args": [
+        "-I/opt/homebrew/Cellar/raylib/5.5/include",
+        "-L/opt/homebrew/Cellar/raylib/5.5/lib",
         "-fcolor-diagnostics",
         "-fansi-escape-codes",
         "-g",
         "-O0",
+        "-lraylib",
         "${workspaceFolder}/src/*.cpp",
         "-o",
         "${workspaceFolder}/build/graph_dbg"

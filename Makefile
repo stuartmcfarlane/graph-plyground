@@ -33,10 +33,13 @@ $(BUILD_DIR)/%.cpp.o: %.cpp
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
 
 
-.PHONY: clean
+.PHONY: clean run
 
 clean:
 	$(RM) -r $(BUILD_DIR)
+
+run: $(BUILD_DIR)/$(TARGET_EXEC)
+	$(BUILD_DIR)/$(TARGET_EXEC) data/graph1
 
 -include $(DEPS)
 

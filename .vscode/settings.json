@@ -4,6 +4,17 @@
     "CPLUS",
     "CPPFLAGS",
     "LDFLAGS",
+    "LIGHTGRAY",
+    "lraylib",
+    "raylib",
+    "RAYWHITE",
     "Wextra"
+  ],
+  "C_Cpp.default.includePath": [
+    "/opt/homebrew/Cellar/raylib/5.5/include"
+  ],
+  "clangd.fallbackFlags": [
+      "-I${workspaceFolder}/include",
+      "-I/opt/homebrew/Cellar/raylib/5.5/include"
   ]
 }
