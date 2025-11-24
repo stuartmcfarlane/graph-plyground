@@ -72,7 +72,7 @@ int main(int argc, char **argv) {
 
     for_each(nodes.begin(), nodes.end(), [](Node const &node) {
       auto [arc, x, y] = node;
-      DrawCircle(x, y, 10.0, RED);
+      DrawCircle(25.0 + (x * 8.0), 10.0 + (4.5 * y), 10.0, RED);
     });
     
     EndDrawing();
