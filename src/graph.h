@@ -37,4 +37,11 @@ namespace graph {
         }
         return graph;
     }
+
+    template <typename W>
+    std::ostream &operator<<(std::ostream &os, const Arc<W> &arc) {
+        auto [a, b, w] = arc;
+        os << "Arc<" << a << " -> " << b << " : " << w << ">";
+        return os;
+    }
 }
