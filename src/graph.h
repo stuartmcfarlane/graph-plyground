@@ -1,60 +1,66 @@
 #pragma once
 
+#include <map>
+#include <set>
+#include <sstream>
 #include <string>
-#include <vector>
 #include <tuple>
 #include <utility>
-#include <sstream>
+#include <vector>
 
 namespace graph {
-    
-    template <typename W>
-    using
-    Arc = std::tuple<std::string, std::string, W>;
-    
-    template <typename W> struct ArcXY {
-        Arc<W> arc;
-        float x;
-        float y;
-    };
-    
-    template <typename W> using Graph = std::vector<Arc<W>>;
 
-    template <typename W>
-    using Adjacency = std::vector<std::vector<std::pair<int, W>>>;
+template <typename N> struct NodeXY {
+  N name;
+  float x;
+  float y;
+};
 
-    template <typename W>
-    Graph<W> lines2graph(std::vector<std::string> const &lines) {
-      Graph<W> graph;
-      for (auto line : lines) {
-        std::string a, b;
-        int w;
-        std::stringstream ss(line);
-        ss >> a;
-        ss >> b;
-        ss >> w;
-        graph.push_back(Arc<W>(a, b, w));
-      }
-      return graph;
-    }
+template <typename N, typename W = float>
+using Arc = std::tuple<N, N, W>;
 
-    template <typename W>
-    std::ostream &operator<<(std::ostream &os, Arc<W> const& arc) {
-        auto [a, b, w] = arc;
-        os << "Arc<" << a << " -> " << b << " : " << w << ">";
-        return os;
+template <typename N, typename W = float>
+using Adjacent = std::map<N, std::map<N, W>>;
+
+template <typename N, typename W> struct Graph {
+  std::set<N> nodes;
+  std::vector<Arc<N, W>> arcs;
+  Adjacent<N, W> adjacent;
+};
+
+template <typename W>
+Graph<std::string, W> lines2graph(std::vector<std::string> const &lines) {
+  Graph<std::string, W> graph;
+  for (auto line : lines) {
+    std::string a, b;
+    W w;
+    std::stringstream ss(line);
+    ss >> a;
+    ss >> b;
+    ss >> w;
+    if (graph.nodes.contains(a)) {
+      graph.nodes.insert(a);
     }
-    template <typename W>
-    std::ostream &operator<<(std::ostream &os, ArcXY<W> const& arcXY) {
-        os << "ArcXY<" << arcXY.arc << " (" << arcXY.x << ", " << arcXY.y
-        << ")"
-        << ">";
-        return os;
+    graph.arcs.push_back(Arc<std::string, W>(a, b, w));
+    if (graph.adjacent.contains(a)) {
+      graph.adjacent[a] = std::map<std::string, W>();
     }
-    template <typename W>
-    std::ostream &operator<<(std::ostream &os, Graph<W> const& graph) {
-        for (auto arc : graph) os << arc;
-        return os;
-    }
-    
+    graph.adjacent[a][b] = w;
+  }
+  return graph;
+}
+
+template <typename N, typename W>
+std::ostream &operator<<(std::ostream &os, Arc<N, W> const &arc) {
+  auto [a, b, w] = arc;
+  os << "Arc<" << a << " -> " << b << " : " << w << ">";
+  return os;
+}
+template <typename N, typename W>
+std::ostream &operator<<(std::ostream &os, Graph<N, W> const &graph) {
+  for (auto arc : graph)
+    os << arc;
+  return os;
+}
+
 } // namespace graph

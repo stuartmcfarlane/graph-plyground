@@ -60,7 +60,7 @@ string edgeKey(const string &a, const string &b) {
     return a + ":" + b;
 }
 
-void print_graph(vector<string> nodes, vector<vector<pair<int, int>>> graph) {
+void print_adjacency(vector<string> nodes, vector<vector<pair<int, int>>> graph) {
     int i = 0;
     for (auto a : graph) {
         cout << nodes[i] << " : [";
@@ -72,14 +72,14 @@ void print_graph(vector<string> nodes, vector<vector<pair<int, int>>> graph) {
     }
 }
 
-pair<vector<string>, int> dijkstra_path(string start, string end, Graph <int>graph) {
+pair<vector<string>, int> dijkstra_path(string start, string end, Graph<string, float>graph) {
     map<string, int> nodeIdx;
     vector<string> nodes;
     map<string, int> weights;
     vector<vector<pair<int, int>>> adj;
     int i = 0;
 
-    for (auto arc : graph) {
+    for (auto arc : graph.arcs) {
         auto [a, b, w] = arc;
         weights[edgeKey(a, b)] = w;
         if (nodeIdx.find(a) == nodeIdx.end()) {
@@ -95,7 +95,7 @@ pair<vector<string>, int> dijkstra_path(string start, string end, Graph <int>gra
         adj[nodeIdx[a]].push_back(pair<int, int>(nodeIdx[b], w));
     }
     
-    print_graph(nodes, adj);
+    print_adjacency(nodes, adj);
     
     vector<int> d;
     vector<int> p;

@@ -10,3 +10,7 @@
 6. plot SDM[^1] solutions
 
 [^1]: SDM is an algorithm that maximizes one property of edges while bounding another.
+
+## Tools
+
+- [eigen matrix library](https://gitlab.com/libeigen/eigen)
