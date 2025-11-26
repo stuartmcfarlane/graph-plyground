@@ -1,33 +1,31 @@
 #include "dijkstra.h"
-// #include "raylib.h"
-// #include "smacof.h"
+#include "raylib.h"
+#include "smacof.h"
 #include "utils.h"
-// #include <algorithm>
+#include <cstddef>
 #include <iostream>
-// #include <iterator>
+#include <map>
 #include <random>
-// #include <string>
+#include <string>
+#include <utility>
 
 #include "graph.h"
 
 using namespace std;
 using namespace graph;
+using namespace graph_algorithm;
 
 random_device dev; 
 mt19937 rng(dev());
 uniform_int_distribution<int>
     dist0_100(0, 100);
 
-// auto arc2arcXY(Arc<float> const &arc) {
-//   auto [a, b, w] = arc;
-//   return ArcXY<float> {
-//     Arc<float>{a, b, w},
-//     static_cast<float>(dist0_100(rng)),
-//     static_cast<float>(dist0_100(rng)),
-//     };
-// }
-
-// bool iterate_arcXYs(vector<ArcXY<float>> &arcXYs) { return graph_algorithm::iterate_smacof(arcXYs); }
+Point randomPoint() {
+  return Point{
+    static_cast<float>(dist0_100(rng)),
+    static_cast<float>(dist0_100(rng)),
+  };
+}
 
 int main(int argc, char **argv) {
   string program = argv[0];
@@ -37,39 +35,38 @@ int main(int argc, char **argv) {
   }
   auto graph = lines2graph<float>(readFileLines(argv[1]));
   auto [path, distance] = dijkstra_path("S", "F", graph);
+
+  std::map<string, Point> pointByNode;
+  for (auto node : graph.nodes) {
+    pointByNode[node] = randomPoint();
+  }
+
+  iterate_smacof(pointByNode, graph.adjacent);
+
+  const int screenWidth = 800;
+  const int screenHeight = 450;
   
-  // vector<ArcXY<float>> arcXYs;
-  // transform(graph.begin(), graph.end(), back_inserter(arcXYs), arc2arcXY);
-
-  // iterate_arcXYs(arcXYs);
-
-  // const int screenWidth = 800;
-  // const int screenHeight = 450;
+  InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
   
-  // InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
-  
-  // SetTargetFPS(60);
-  // bool balanced = false;
+  SetTargetFPS(60);
+  bool balanced = false;
 
-  // while (!WindowShouldClose()) // Detect window close button or ESC key
-  // {
-  //   if (!balanced) {
-  //     balanced = iterate_arcXYs(arcXYs);
-  //   }
-
-  //   BeginDrawing();
+  while (!WindowShouldClose()) // Detect window close button or ESC key
+  {
+    BeginDrawing();
     
-  //   ClearBackground(RAYWHITE);
+    ClearBackground(RAYWHITE);
 
-  //   for_each(arcXYs.begin(), arcXYs.end(), [](ArcXY<float> const &arcXY) {
-  //     auto [arc, x, y] = arcXY;
-  //     DrawCircle(10.0 + (x * 8.0), 10.0 + (4.0 * y), 10.0, RED);
-  //   });
+    for_each(pointByNode.begin(), pointByNode.end(), [](pair<string, Point> const &nodePoint) {
+      auto [node, point] = nodePoint;
+      auto [x, y] = point;
+      DrawCircle(10.0 + (x * 8.0), 10.0 + (4.0 * y), 10.0, RED);
+    });
     
-  //   EndDrawing();
-  // }
+    EndDrawing();
+  }
   
-  // CloseWindow(); // Close window and OpenGL context
+  CloseWindow(); // Close window and OpenGL context
   
   return 0;
 }

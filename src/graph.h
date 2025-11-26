@@ -1,6 +1,8 @@
 #pragma once
 
+#include <iostream>
 #include <map>
+#include <ostream>
 #include <set>
 #include <sstream>
 #include <string>
@@ -10,56 +12,69 @@
 
 namespace graph {
 
-template <typename N> struct NodeXY {
-  N name;
-  float x;
-  float y;
+template <typename NodeKeyType, typename WeightType = float>
+using Arc = std::tuple<NodeKeyType, NodeKeyType, WeightType>;
+
+template <typename NodeKeyType, typename WeightType = float>
+using Adjacent = std::map<NodeKeyType, std::map<NodeKeyType, WeightType>>;
+
+template <typename NodeKeyType, typename WeightType> struct Graph {
+  std::set<NodeKeyType> nodes;
+  std::vector<Arc<NodeKeyType, WeightType>> arcs;
+  Adjacent<NodeKeyType, WeightType> adjacent;
+
+  template <typename NN> void addNode(const NN &node) {
+    if (!this->nodes.contains(node)) {
+      this->nodes.insert(node);
+    }
+  }
+
+  void addArc(const Arc<NodeKeyType, WeightType> &arc) {
+    auto [from, to, weight] = arc;
+    this->addNode(from);
+    this->addNode(to);
+    this->arcs.push_back(arc);
+    if (this->adjacent.contains(from)) {
+      this->adjacent[from] = std::map<std::string, WeightType>();
+    }
+    this->adjacent[from][to] = weight;
+  }
 };
 
-template <typename N, typename W = float>
-using Arc = std::tuple<N, N, W>;
-
-template <typename N, typename W = float>
-using Adjacent = std::map<N, std::map<N, W>>;
-
-template <typename N, typename W> struct Graph {
-  std::set<N> nodes;
-  std::vector<Arc<N, W>> arcs;
-  Adjacent<N, W> adjacent;
-};
-
-template <typename W>
-Graph<std::string, W> lines2graph(std::vector<std::string> const &lines) {
-  Graph<std::string, W> graph;
+template <typename WeightType>
+Graph<std::string, WeightType>
+lines2graph(std::vector<std::string> const &lines) {
+  Graph<std::string, WeightType> graph;
   for (auto line : lines) {
     std::string a, b;
-    W w;
+    WeightType w;
     std::stringstream ss(line);
     ss >> a;
     ss >> b;
     ss >> w;
-    if (graph.nodes.contains(a)) {
-      graph.nodes.insert(a);
-    }
-    graph.arcs.push_back(Arc<std::string, W>(a, b, w));
-    if (graph.adjacent.contains(a)) {
-      graph.adjacent[a] = std::map<std::string, W>();
-    }
-    graph.adjacent[a][b] = w;
+    graph.addArc(Arc<std::string, WeightType>(a, b, w));
   }
   return graph;
 }
 
-template <typename N, typename W>
-std::ostream &operator<<(std::ostream &os, Arc<N, W> const &arc) {
+template <typename NodeKeyType, typename WeightType>
+std::ostream &operator<<(std::ostream &os, Arc<NodeKeyType, WeightType> const &arc) {
   auto [a, b, w] = arc;
   os << "Arc<" << a << " -> " << b << " : " << w << ">";
   return os;
 }
-template <typename N, typename W>
-std::ostream &operator<<(std::ostream &os, Graph<N, W> const &graph) {
-  for (auto arc : graph)
-    os << arc;
+// template <typename NodeKeyType, typename WeightType>
+// std::ostream &operator<<(std::ostream &os, Graph<NodeKeyType, WeightType> const &graph) {
+//   for (auto arc : graph.arcs)
+//     os << arc;
+//   return os;
+// }
+template <typename NodeKeyType, typename WeightType>
+std::ostream &operator<<(std::ostream &os, Graph<NodeKeyType, WeightType>
+const &graph) {
+  os << "Graph<" << graph.nodes.size() << ">" << std::endl;
+  for (auto arc : graph.arcs)
+    os << "  " << arc << std::endl;
   return os;
 }
 
