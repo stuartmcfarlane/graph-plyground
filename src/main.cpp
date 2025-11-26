@@ -2,6 +2,7 @@
 #include "raylib.h"
 #include "smacof.h"
 #include "utils.h"
+#include <algorithm>
 #include <cstddef>
 #include <iostream>
 #include <map>
@@ -27,6 +28,13 @@ Point randomPoint() {
   };
 }
 
+Point scalePoint(const Point &p) {
+  auto [x, y] = p;
+  float px = 10.0 + (x * 8.0);
+  float py = 10.0 + (4.0 * y);
+  return Point{px, py};
+}
+
 int main(int argc, char **argv) {
   string program = argv[0];
   if (argc < 2) {
@@ -45,7 +53,7 @@ int main(int argc, char **argv) {
 
   const int screenWidth = 800;
   const int screenHeight = 450;
-  
+
   InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
   
   SetTargetFPS(60);
@@ -57,12 +65,20 @@ int main(int argc, char **argv) {
     
     ClearBackground(RAYWHITE);
 
-    for_each(pointByNode.begin(), pointByNode.end(), [](pair<string, Point> const &nodePoint) {
-      auto [node, point] = nodePoint;
-      auto [x, y] = point;
-      DrawCircle(10.0 + (x * 8.0), 10.0 + (4.0 * y), 10.0, RED);
+    ranges::for_each(graph.arcs, [pointByNode](const Arc<string, float> &arc) {
+      auto [a, b, w] = arc;
+      auto [ax, ay] = scalePoint(pointByNode.at(a));
+      auto [bx, by] = scalePoint(pointByNode.at(b));
+      DrawLine(ax, ay, bx, by, BLUE);
     });
-    
+
+    ranges::for_each(pointByNode, [](pair<string, Point> const &nodePoint) {
+      auto [node, point] = nodePoint;
+      auto [x, y] = scalePoint(point);
+      auto color = (node == "S" ? GREEN : node == "F" ? RED : BLACK);
+      DrawCircle(x, y, 10.0, color);
+    });
+
     EndDrawing();
   }
   

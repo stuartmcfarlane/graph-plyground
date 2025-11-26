@@ -48,7 +48,6 @@ namespace graph_algorithm {
         MatrixX<float> D(N, N);
         MatrixX<float> δ(N, N);
         MatrixX<float> ω(N, N);
-        MatrixX<float> W(N, N);
         
         vector<NodeKeyType> nodeByIndex;
         for (auto nodePoint : points) {
@@ -61,7 +60,6 @@ namespace graph_algorithm {
           X(i, 0) = xi;
           X(i, 1) = yi;
           D(i, i) = 0;
-          W(i, i) = graph.weightOf(iNode, iNode, 0);
           δ(i, i) = δOf(graph, iNode, iNode);
           ω(i, i) = ωOf(δ(i, i));
           for (int j = 0; j < i; ++j) {
@@ -72,8 +70,6 @@ namespace graph_algorithm {
             const float d = sqrt(dx * dx + dy * dy);
             D(i, j) = d;
             D(j, i) = d;
-            W(i, j) = graph.weightOf(iNode, jNode, 0);
-            W(j, i) = graph.weightOf(jNode, iNode, 0);
             δ(i, j) = δOf(graph, iNode, jNode);
             δ(j, i) = δOf(graph, jNode, iNode);
             ω(i, j) = ωOf(δ(i, j));
@@ -86,8 +82,6 @@ namespace graph_algorithm {
         cout << X << endl;
         cout << "transposeX" << endl;
         cout << transposeX << endl;
-        cout << "W" << endl;
-        cout << W << endl;
         cout << "D" << endl;
         cout << D << endl;
         cout << "δ" << endl;
