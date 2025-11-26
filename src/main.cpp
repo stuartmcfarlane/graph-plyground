@@ -41,7 +41,7 @@ int main(int argc, char **argv) {
     pointByNode[node] = randomPoint();
   }
 
-  iterate_smacof(pointByNode, graph.adjacent);
+  iterate_smacof(pointByNode, graph);
 
   const int screenWidth = 800;
   const int screenHeight = 450;

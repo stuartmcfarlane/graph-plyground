@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cmath>
 #include <iostream>
 #include <map>
 #include <ostream>
@@ -21,7 +22,7 @@ using Adjacent = std::map<NodeKeyType, std::map<NodeKeyType, WeightType>>;
 template <typename NodeKeyType, typename WeightType> struct Graph {
   std::set<NodeKeyType> nodes;
   std::vector<Arc<NodeKeyType, WeightType>> arcs;
-  Adjacent<NodeKeyType, WeightType> adjacent;
+  std::map<NodeKeyType, std::map<NodeKeyType, WeightType>> adjacent;
 
   template <typename NN> void addNode(const NN &node) {
     if (!this->nodes.contains(node)) {
@@ -38,6 +39,13 @@ template <typename NodeKeyType, typename WeightType> struct Graph {
       this->adjacent[from] = std::map<std::string, WeightType>();
     }
     this->adjacent[from][to] = weight;
+  }
+  WeightType weightOf(const NodeKeyType &from, const NodeKeyType &to, WeightType noArcWeight = INFINITY) const {
+    if (!this->adjacent.contains(from)) {
+      return noArcWeight;
+    }
+    if (!this->adjacent.at(from).contains(to)) { return noArcWeight; }
+    return this->adjacent.at(from).at(to);
   }
 };
 
@@ -63,12 +71,6 @@ std::ostream &operator<<(std::ostream &os, Arc<NodeKeyType, WeightType> const &a
   os << "Arc<" << a << " -> " << b << " : " << w << ">";
   return os;
 }
-// template <typename NodeKeyType, typename WeightType>
-// std::ostream &operator<<(std::ostream &os, Graph<NodeKeyType, WeightType> const &graph) {
-//   for (auto arc : graph.arcs)
-//     os << arc;
-//   return os;
-// }
 template <typename NodeKeyType, typename WeightType>
 std::ostream &operator<<(std::ostream &os, Graph<NodeKeyType, WeightType>
 const &graph) {

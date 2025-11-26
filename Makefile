@@ -39,7 +39,7 @@ clean:
 	$(RM) -r $(BUILD_DIR)
 
 run: $(BUILD_DIR)/$(TARGET_EXEC)
-	$(BUILD_DIR)/$(TARGET_EXEC) data/graph1
+	$(BUILD_DIR)/$(TARGET_EXEC) data/graph3
 
 -include $(DEPS)
 
