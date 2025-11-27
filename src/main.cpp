@@ -43,6 +43,14 @@ int main(int argc, char **argv) {
   }
   auto graph = lines2graph<float>(readFileLines(argv[1]));
   auto [path, distance] = dijkstra_path("S", "F", graph);
+  vector<Arc<string, float>> pathArcs;
+  string lastNode = path[0];
+  for (auto node : path) {
+    if (node == lastNode)
+      continue;
+    pathArcs.push_back(Arc{lastNode, node, graph.weightOf(lastNode, node)});
+    lastNode = node;
+  }
 
   std::map<string, Point> pointByNode;
   for (auto node : graph.nodes) {
@@ -71,7 +79,14 @@ int main(int argc, char **argv) {
       auto [bx, by] = scalePoint(pointByNode.at(b));
       DrawLine(ax, ay, bx, by, BLUE);
     });
-
+    string lastNode = path[0];
+    int i = 0;
+    ranges::for_each(pathArcs, [pointByNode](auto arc) {
+      auto [a, b, w] = arc;
+      auto [ax, ay] = scalePoint(pointByNode.at(a));
+      auto [bx, by] = scalePoint(pointByNode.at(b));
+      DrawLine(ax, ay, bx, by, GREEN);
+    });
     ranges::for_each(pointByNode, [](pair<string, Point> const &nodePoint) {
       auto [node, point] = nodePoint;
       auto [x, y] = scalePoint(point);
