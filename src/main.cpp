@@ -62,7 +62,7 @@ int main(int argc, char **argv) {
   const int screenWidth = 800;
   const int screenHeight = 450;
 
-  InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
+  InitWindow(screenWidth, screenHeight, "Graph Playground");
   
   SetTargetFPS(60);
   bool balanced = false;
